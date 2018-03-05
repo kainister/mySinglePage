@@ -10,11 +10,11 @@ function readTextFile(file)
         if (file === 'profile.html') {
             var name = document.querySelector('#username');
             name.setAttribute('value', username);
-            console.log('test');
             document.querySelector('#edit_btn').onclick = function () {
-                console.log('ca marche');
                 sessionStorage.clear('username');
                 sessionStorage.setItem('username', name.value);
+                alert('Your name has been changed successfully');
+                readTextFile('home.html');
             };
 
         } else {
@@ -26,6 +26,10 @@ function readTextFile(file)
         };
         document.querySelector('.profile').onclick = function () {
             readTextFile('profile.html');
+        };
+        document.querySelector('.logout').onclick = function () {
+            sessionStorage.clear('username');
+            readTextFile('index.html');
         };
     };
     xhttp.open("GET", file, true);
