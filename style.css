@@ -1,0 +1,5 @@
+nav {
+    display: flex;
+    background-color: #18ff2c;
+    justify-content: space-evenly;
+}

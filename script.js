@@ -1,33 +1,60 @@
 function readTextFile(file)
 {
-    var rawFile = new XMLHttpRequest();
-    rawFile.open("GET", file, true);
-    rawFile.onreadystatechange = function ()
-    {
-        if(rawFile.readyState === 4)
-        {
-            if(rawFile.status === 200 || rawFile.status === 0)
-            {
-                var allText = rawFile.responseText;
-                displayFileContent(allText);
-            }
+    var xhttp = new XMLHttpRequest();
+    xhttp.onreadystatechange = function() {
+        if (this.readyState == 4 && this.status == 200) {
+            document.querySelector('#content').innerHTML =
+                this.responseText;
         }
     };
-    rawFile.send(null);
+    xhttp.open("GET", file, true);
+    xhttp.send();
 }
-function displayFileContent(alltext) {
-    var content = document.querySelector('#content');
-    content.innerHTML = alltext;
-}
-window.onload =function () {
-    document.querySelector('#myForm').onsubmit = function () {
-        var username = document.querySelector('.username').value;
-        sessionStorage.setItem('username', username);
-        console.log('azert');
-        return false;
-    };
 
-    document.querySelector('.submit').onclick = function () {
-        readTextFile('accueil.html');
+function displayProfile() {
+    setTimeout(function () {
+        document.querySelector('.profile').onclick = function () {
+            readTextFile('profile.html');
+            setTimeout(function () {
+                document.querySelector('#username').innerHTML = username;
+            }, 100);
+        }
+    }, 100);
+    setTimeout(function () {
+        displayHome();
+    }, 100);
+}
+
+function displayHome() {
+    setTimeout(function () {
+        document.querySelector('.home').onclick = function () {
+            readTextFile('home.html');
+        }
+    }, 100);
+    setTimeout(function () {
+        displayProfile();
+    }, 100);
+}
+var username = sessionStorage.getItem('username');
+window.onload =function () {
+    if (sessionStorage.getItem('username') !== null) {
+        var username = sessionStorage.getItem('username');
+        readTextFile('home.html');
+        displayProfile();
+        displayHome();
+
+    }
+    document.querySelector('#myForm').onsubmit = function () {
+        var userName = document.querySelector('.username').value;
+        var userPassword = document.querySelector('.password').value;
+        if (userName === '' || userPassword === '') {
+            alert('please enter value in username and password');
+            return false;
+        }
+        sessionStorage.setItem('username', userName);
+        readTextFile('home.html');
+        displayProfile();
+        displayHome();
+        return false;
     };
 };
